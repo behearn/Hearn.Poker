@@ -35,11 +35,39 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.RoyalFlush, handRank);
+            Assert.AreEqual(Hand.HandRanks.RoyalFlush, hand.HandRank);
+
+        }
+
+        [TestMethod]
+        public void HandValidator_CheckHand_RoyalFlushRankedCards()
+        {
+
+            //Arrange
+
+            var cards = new List<Card>()
+            {
+                new Card() { Value = Card.Values.Jack, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.King, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Queen, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Ace, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Ten, Suit = Card.Suits.Clubs}
+            };
+
+            //Act
+
+            var hand = _handValidator.CheckHand(cards);
+
+            //Assert
+
+            Assert.AreEqual(5, hand.RankedCards.Count);
+            Assert.AreEqual(0, hand.SideCards.Count);
+            Assert.AreEqual(Card.Values.Ace, hand.RankedCards[0].Value);
+            Assert.AreEqual(Card.Values.Ten, hand.RankedCards[4].Value);
 
         }
 
@@ -60,11 +88,39 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.StraightFlush, handRank);
+            Assert.AreEqual(Hand.HandRanks.StraightFlush, hand.HandRank);
+
+        }
+
+        [TestMethod]
+        public void HandValidator_CheckHand_StraightFlushRankedCards()
+        {
+
+            //Arrange
+
+            var cards = new List<Card>()
+            {
+                new Card() { Value = Card.Values.Three, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Five, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Six, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Four, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Seven, Suit = Card.Suits.Clubs}
+            };
+
+            //Act
+
+            var hand = _handValidator.CheckHand(cards);
+
+            //Assert
+            
+            Assert.AreEqual(5, hand.RankedCards.Count);
+            Assert.AreEqual(0, hand.SideCards.Count);
+            Assert.AreEqual(Card.Values.Seven, hand.RankedCards[0].Value);
+            Assert.AreEqual(Card.Values.Three, hand.RankedCards[4].Value);
 
         }
 
@@ -85,11 +141,11 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.StraightFlush, handRank);
+            Assert.AreEqual(Hand.HandRanks.StraightFlush, hand.HandRank);
 
         }
 
@@ -110,11 +166,11 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.FourOfaKind, handRank);
+            Assert.AreEqual(Hand.HandRanks.FourOfaKind, hand.HandRank);
 
         }
 
@@ -135,11 +191,11 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.FourOfaKind, handRank);
+            Assert.AreEqual(Hand.HandRanks.FourOfaKind, hand.HandRank);
 
         }
 
@@ -160,11 +216,39 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.FourOfaKind, handRank);
+            Assert.AreEqual(Hand.HandRanks.FourOfaKind, hand.HandRank);
+
+        }
+
+        [TestMethod]
+        public void HandValidator_CheckHand_FourOfaKindRankedCards()
+        {
+
+            //Arrange
+
+            var cards = new List<Card>()
+            {
+                new Card() { Value = Card.Values.Two, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Two, Suit = Card.Suits.Spades},
+                new Card() { Value = Card.Values.Three, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Two, Suit = Card.Suits.Diamonds},
+                new Card() { Value = Card.Values.Two, Suit = Card.Suits.Hearts}
+            };
+
+            //Act
+
+            var hand = _handValidator.CheckHand(cards);
+
+            //Assert
+            
+            Assert.AreEqual(4, hand.RankedCards.Count);
+            Assert.AreEqual(1, hand.SideCards.Count);
+            Assert.AreEqual(Card.Values.Two, hand.RankedCards[0].Value);
+            Assert.AreEqual(Card.Values.Three, hand.SideCards[0].Value);
 
         }
 
@@ -185,11 +269,11 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.FullHouse, handRank);
+            Assert.AreEqual(Hand.HandRanks.FullHouse, hand.HandRank);
 
         }
 
@@ -210,11 +294,11 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.FullHouse, handRank);
+            Assert.AreEqual(Hand.HandRanks.FullHouse, hand.HandRank);
 
         }
 
@@ -235,11 +319,42 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.FullHouse, handRank);
+            Assert.AreEqual(Hand.HandRanks.FullHouse, hand.HandRank);
+
+        }
+
+        [TestMethod]
+        public void HandValidator_CheckHand_FullHouseRankedCards()
+        {
+
+            //Arrange
+
+            var cards = new List<Card>()
+            {
+                new Card() { Value = Card.Values.Two, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Three, Suit = Card.Suits.Hearts},
+                new Card() { Value = Card.Values.Three, Suit = Card.Suits.Diamonds},
+                new Card() { Value = Card.Values.Three, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Two, Suit = Card.Suits.Spades}
+            };
+
+            //Act
+
+            var hand = _handValidator.CheckHand(cards);
+
+            //Assert
+
+            Assert.AreEqual(5, hand.RankedCards.Count);
+            Assert.AreEqual(0, hand.SideCards.Count);
+            Assert.AreEqual(Card.Values.Three, hand.RankedCards[0].Value);
+            Assert.AreEqual(Card.Values.Three, hand.RankedCards[1].Value);
+            Assert.AreEqual(Card.Values.Three, hand.RankedCards[2].Value);
+            Assert.AreEqual(Card.Values.Two, hand.RankedCards[3].Value);
+            Assert.AreEqual(Card.Values.Two, hand.RankedCards[4].Value);
 
         }
 
@@ -260,11 +375,11 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.FullHouse, handRank);
+            Assert.AreEqual(Hand.HandRanks.FullHouse, hand.HandRank);
 
         }
 
@@ -285,11 +400,11 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.Flush, handRank);
+            Assert.AreEqual(Hand.HandRanks.Flush, hand.HandRank);
 
         }
 
@@ -310,11 +425,11 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.Flush, handRank);
+            Assert.AreEqual(Hand.HandRanks.Flush, hand.HandRank);
 
         }
 
@@ -335,11 +450,11 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.Flush, handRank);
+            Assert.AreEqual(Hand.HandRanks.Flush, hand.HandRank);
 
         }
 
@@ -360,11 +475,42 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.Flush, handRank);
+            Assert.AreEqual(Hand.HandRanks.Flush, hand.HandRank);
+
+        }
+
+        [TestMethod]
+        public void HandValidator_CheckHand_FlushRankedCards()
+        {
+
+            //Arrange
+
+            var cards = new List<Card>()
+            {
+                new Card() { Value = Card.Values.Ace, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Five, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Six, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Four, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Queen, Suit = Card.Suits.Clubs}
+            };
+
+            //Act
+
+            var hand = _handValidator.CheckHand(cards);
+
+            //Assert
+
+            Assert.AreEqual(5, hand.RankedCards.Count);
+            Assert.AreEqual(0, hand.SideCards.Count);
+            Assert.AreEqual(Card.Values.Ace, hand.RankedCards[0].Value);
+            Assert.AreEqual(Card.Values.Queen, hand.RankedCards[1].Value);
+            Assert.AreEqual(Card.Values.Six, hand.RankedCards[2].Value);
+            Assert.AreEqual(Card.Values.Five, hand.RankedCards[3].Value);
+            Assert.AreEqual(Card.Values.Four, hand.RankedCards[4].Value);
 
         }
 
@@ -385,11 +531,11 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.Straight, handRank);
+            Assert.AreEqual(Hand.HandRanks.Straight, hand.HandRank);
 
         }
 
@@ -410,14 +556,45 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.Straight, handRank);
+            Assert.AreEqual(Hand.HandRanks.Straight, hand.HandRank);
 
         }
 
+        [TestMethod]
+        public void HandValidator_CheckHand_StraightAceLowRankedCards()
+        {
+
+            //Arrange
+
+            var cards = new List<Card>()
+            {
+                new Card() { Value = Card.Values.Three, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Five, Suit = Card.Suits.Hearts},
+                new Card() { Value = Card.Values.Two, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Four, Suit = Card.Suits.Spades},
+                new Card() { Value = Card.Values.Ace, Suit = Card.Suits.Diamonds}
+            };
+
+            //Act
+
+            var hand = _handValidator.CheckHand(cards);
+
+            //Assert
+            
+            Assert.AreEqual(5, hand.RankedCards.Count);
+            Assert.AreEqual(0, hand.SideCards.Count);
+            Assert.AreEqual(Card.Values.Five, hand.RankedCards[0].Value);
+            Assert.AreEqual(Card.Values.Four, hand.RankedCards[1].Value);
+            Assert.AreEqual(Card.Values.Three, hand.RankedCards[2].Value);
+            Assert.AreEqual(Card.Values.Two, hand.RankedCards[3].Value);
+            Assert.AreEqual(Card.Values.Ace, hand.RankedCards[4].Value);
+
+        }
+        
         [TestMethod]
         public void HandValidator_CheckHand_StraightAceHigh()
         {
@@ -435,11 +612,42 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.Straight, handRank);
+            Assert.AreEqual(Hand.HandRanks.Straight, hand.HandRank);
+
+        }
+
+        [TestMethod]
+        public void HandValidator_CheckHand_StraightAceHighRankedCards()
+        {
+
+            //Arrange
+
+            var cards = new List<Card>()
+            {
+                new Card() { Value = Card.Values.King, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Ten, Suit = Card.Suits.Hearts},
+                new Card() { Value = Card.Values.Jack, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Queen, Suit = Card.Suits.Spades},
+                new Card() { Value = Card.Values.Ace, Suit = Card.Suits.Diamonds}
+            };
+
+            //Act
+
+            var hand = _handValidator.CheckHand(cards);
+
+            //Assert
+            
+            Assert.AreEqual(5, hand.RankedCards.Count);
+            Assert.AreEqual(0, hand.SideCards.Count);
+            Assert.AreEqual(Card.Values.Ace, hand.RankedCards[0].Value);
+            Assert.AreEqual(Card.Values.King, hand.RankedCards[1].Value);
+            Assert.AreEqual(Card.Values.Queen, hand.RankedCards[2].Value);
+            Assert.AreEqual(Card.Values.Jack, hand.RankedCards[3].Value);
+            Assert.AreEqual(Card.Values.Ten, hand.RankedCards[4].Value);
 
         }
 
@@ -460,11 +668,11 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.ThreeOfaKind, handRank);
+            Assert.AreEqual(Hand.HandRanks.ThreeOfaKind, hand.HandRank);
 
         }
 
@@ -485,11 +693,11 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.ThreeOfaKind, handRank);
+            Assert.AreEqual(Hand.HandRanks.ThreeOfaKind, hand.HandRank);
 
         }
 
@@ -510,11 +718,42 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.ThreeOfaKind, handRank);
+            Assert.AreEqual(Hand.HandRanks.ThreeOfaKind, hand.HandRank);
+
+        }
+        
+        [TestMethod]
+        public void HandValidator_CheckHand_ThreeOfaKindRankedCards()
+        {
+
+            //Arrange
+
+            var cards = new List<Card>()
+            {
+                new Card() { Value = Card.Values.King, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Ten, Suit = Card.Suits.Hearts},
+                new Card() { Value = Card.Values.Ace, Suit = Card.Suits.Diamonds},
+                new Card() { Value = Card.Values.King, Suit = Card.Suits.Diamonds},
+                new Card() { Value = Card.Values.King, Suit = Card.Suits.Spades}
+            };
+
+            //Act
+
+            var hand = _handValidator.CheckHand(cards);
+
+            //Assert
+
+            Assert.AreEqual(3, hand.RankedCards.Count);
+            Assert.AreEqual(2, hand.SideCards.Count);
+            Assert.AreEqual(Card.Values.King, hand.RankedCards[0].Value);
+            Assert.AreEqual(Card.Values.King, hand.RankedCards[1].Value);
+            Assert.AreEqual(Card.Values.King, hand.RankedCards[2].Value);
+            Assert.AreEqual(Card.Values.Ace, hand.SideCards[0].Value);
+            Assert.AreEqual(Card.Values.Ten, hand.SideCards[1].Value);
 
         }
 
@@ -535,11 +774,11 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.TwoPair, handRank);
+            Assert.AreEqual(Hand.HandRanks.TwoPair, hand.HandRank);
 
         }
 
@@ -560,11 +799,11 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.TwoPair, handRank);
+            Assert.AreEqual(Hand.HandRanks.TwoPair, hand.HandRank);
 
         }
 
@@ -585,11 +824,42 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.TwoPair, handRank);
+            Assert.AreEqual(Hand.HandRanks.TwoPair, hand.HandRank);
+
+        }
+
+        [TestMethod]
+        public void HandValidator_CheckHand_TwoPairRankedCards()
+        {
+
+            //Arrange
+
+            var cards = new List<Card>()
+            {
+                new Card() { Value = Card.Values.Ten, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Ten, Suit = Card.Suits.Hearts},
+                new Card() { Value = Card.Values.Ace, Suit = Card.Suits.Diamonds},
+                new Card() { Value = Card.Values.King, Suit = Card.Suits.Diamonds},
+                new Card() { Value = Card.Values.King, Suit = Card.Suits.Spades}
+            };
+
+            //Act
+
+            var hand = _handValidator.CheckHand(cards);
+
+            //Assert
+
+            Assert.AreEqual(4, hand.RankedCards.Count);
+            Assert.AreEqual(1, hand.SideCards.Count);
+            Assert.AreEqual(Card.Values.King, hand.RankedCards[0].Value);
+            Assert.AreEqual(Card.Values.King, hand.RankedCards[1].Value);
+            Assert.AreEqual(Card.Values.Ten, hand.RankedCards[2].Value);
+            Assert.AreEqual(Card.Values.Ten, hand.RankedCards[3].Value);
+            Assert.AreEqual(Card.Values.Ace, hand.SideCards[0].Value);
 
         }
 
@@ -610,11 +880,11 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.TwoPair, handRank);
+            Assert.AreEqual(Hand.HandRanks.TwoPair, hand.HandRank);
 
         }
 
@@ -635,11 +905,11 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.Pair, handRank);
+            Assert.AreEqual(Hand.HandRanks.Pair, hand.HandRank);
 
         }
 
@@ -660,11 +930,11 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.Pair, handRank);
+            Assert.AreEqual(Hand.HandRanks.Pair, hand.HandRank);
 
         }
 
@@ -685,11 +955,42 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.Pair, handRank);
+            Assert.AreEqual(Hand.HandRanks.Pair, hand.HandRank);
+
+        }
+
+        [TestMethod]
+        public void HandValidator_CheckHand_PairRankedCards()
+        {
+
+            //Arrange
+
+            var cards = new List<Card>()
+            {
+                new Card() { Value = Card.Values.Ten, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Queen, Suit = Card.Suits.Hearts},
+                new Card() { Value = Card.Values.Ace, Suit = Card.Suits.Diamonds},
+                new Card() { Value = Card.Values.King, Suit = Card.Suits.Diamonds},
+                new Card() { Value = Card.Values.Ten, Suit = Card.Suits.Spades}
+            };
+
+            //Act
+
+            var hand = _handValidator.CheckHand(cards);
+
+            //Assert
+
+            Assert.AreEqual(2, hand.RankedCards.Count);
+            Assert.AreEqual(3, hand.SideCards.Count);
+            Assert.AreEqual(Card.Values.Ten, hand.RankedCards[0].Value);
+            Assert.AreEqual(Card.Values.Ten, hand.RankedCards[1].Value);
+            Assert.AreEqual(Card.Values.Ace, hand.SideCards[0].Value);
+            Assert.AreEqual(Card.Values.King, hand.SideCards[1].Value);
+            Assert.AreEqual(Card.Values.Queen, hand.SideCards[2].Value);
 
         }
 
@@ -710,11 +1011,11 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.Pair, handRank);
+            Assert.AreEqual(Hand.HandRanks.Pair, hand.HandRank);
 
         }
 
@@ -735,11 +1036,42 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
 
             //Assert
 
-            Assert.AreEqual(HandValidator.HandRanks.HighCard, handRank);
+            Assert.AreEqual(Hand.HandRanks.HighCard, hand.HandRank);
+
+        }
+
+        [TestMethod]
+        public void HandValidator_CheckHand_HighCardRankedCards()
+        {
+
+            //Arrange
+
+            var cards = new List<Card>()
+            {
+                new Card() { Value = Card.Values.King, Suit = Card.Suits.Diamonds},
+                new Card() { Value = Card.Values.Six, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Ace, Suit = Card.Suits.Diamonds},
+                new Card() { Value = Card.Values.Ten, Suit = Card.Suits.Hearts},
+                new Card() { Value = Card.Values.Two, Suit = Card.Suits.Spades}
+            };
+
+            //Act
+
+            var hand = _handValidator.CheckHand(cards);
+
+            //Assert
+
+            Assert.AreEqual(0, hand.RankedCards.Count);
+            Assert.AreEqual(5, hand.SideCards.Count);
+            Assert.AreEqual(Card.Values.Ace, hand.SideCards[0].Value);
+            Assert.AreEqual(Card.Values.King, hand.SideCards[1].Value);
+            Assert.AreEqual(Card.Values.Ten, hand.SideCards[2].Value);
+            Assert.AreEqual(Card.Values.Six, hand.SideCards[3].Value);
+            Assert.AreEqual(Card.Values.Two, hand.SideCards[4].Value);
 
         }
 
@@ -762,7 +1094,7 @@ namespace Hearn.Poker.UnitTests
             var message = "";
             try
             {
-                var handRank = _handValidator.CheckHand(cards);
+                var hand = _handValidator.CheckHand(cards);
             }
             catch (Exception ex)
             {
@@ -796,7 +1128,7 @@ namespace Hearn.Poker.UnitTests
             var message = "";
             try
             {
-                var handRank = _handValidator.CheckHand(cards);
+                var hand = _handValidator.CheckHand(cards);
             }
             catch (Exception ex)
             {
@@ -826,7 +1158,7 @@ namespace Hearn.Poker.UnitTests
 
             //Act
 
-            var handRank = _handValidator.CheckHand(cards);
+            var hand = _handValidator.CheckHand(cards);
             
             //Assert
 
@@ -858,7 +1190,7 @@ namespace Hearn.Poker.UnitTests
             var message = "";
             try
             {
-                var handRank = _handValidator.CheckHand(cards);
+                var hand = _handValidator.CheckHand(cards);
             }
             catch (Exception ex)
             {

@@ -5,24 +5,11 @@ using System.Text;
 
 namespace Hearn.Poker
 {
+
     public class HandValidator
     {
-
-        public enum HandRanks
-        {
-            HighCard,
-            Pair,
-            TwoPair,
-            ThreeOfaKind,
-            Straight,
-            Flush,
-            FullHouse,
-            FourOfaKind,
-            StraightFlush,
-            RoyalFlush
-        }
-
-        public HandRanks CheckHand(List<Card> cards)
+        
+        public Hand CheckHand(List<Card> cards)
         {
 
             if (cards.Count != 5)
@@ -35,48 +22,91 @@ namespace Hearn.Poker
                 throw new Exception("Duplicate card detected");
             }
 
-            var tempCards = cards.Select(c => new Card() { Value = c.Value, Suit = c.Suit }).ToList();
+            var hand = new Hand();
 
-            var handRank = HandRanks.HighCard;
+            hand.HandRank = Hand.HandRanks.HighCard;
 
-            if (IsRoyalFlush(tempCards))
+            if (IsRoyalFlush(cards))
             {
-                handRank = HandRanks.RoyalFlush;
+                hand.HandRank = Hand.HandRanks.RoyalFlush;
+                hand.RankedCards.AddRange(cards.OrderByDescending(c => c.Value));
             }
-            else if (IsStraightFlush(tempCards))
+            else if (IsStraightFlush(cards))
             {
-                handRank = HandRanks.StraightFlush;
+                hand.HandRank = Hand.HandRanks.StraightFlush;
+                hand.RankedCards.AddRange(cards.OrderByDescending(c => c.Value));
             }
-            else if (IsFourOfaKind(tempCards))
+            else if (IsFourOfaKind(cards))
             {
-                handRank = HandRanks.FourOfaKind;
+                hand.HandRank = Hand.HandRanks.FourOfaKind;
+
+                var fourOfaKindCards = cards.GroupBy(c => c.Value).Where(x => x.Count() == 4).First();
+                hand.RankedCards.AddRange(fourOfaKindCards);
+
+                hand.SideCards.AddRange(cards.Except(fourOfaKindCards));
             }
-            else if (IsFullHouse(tempCards))
+            else if (IsFullHouse(cards))
             {
-                handRank = HandRanks.FullHouse;
+                hand.HandRank = Hand.HandRanks.FullHouse;
+
+                var threeOfaKindCards = cards.GroupBy(c => c.Value).Where(x => x.Count() == 3).First();
+                hand.RankedCards.AddRange(threeOfaKindCards);
+
+                var pairCards = cards.GroupBy(c => c.Value).Where(x => x.Count() == 2).First();
+                hand.RankedCards.AddRange(pairCards);
             }
-            else if (IsFlush(tempCards))
+            else if (IsFlush(cards))
             {
-                handRank = HandRanks.Flush;
+                hand.HandRank = Hand.HandRanks.Flush;
+                hand.RankedCards.AddRange(cards.OrderByDescending(c => c.Value));
             }
-            else if (IsStraight(tempCards))
+            else if (IsStraight(cards))
             {
-                handRank = HandRanks.Straight;
+                hand.HandRank = Hand.HandRanks.Straight;
+                if (cards.Select(c => c.Value).Max() == Card.Values.Ace
+                 && cards.Select(c => c.Value).Min() == Card.Values.Two)
+                {
+                    hand.RankedCards.AddRange(cards.OrderByDescending(c => c.Value == Card.Values.Ace ? Card.Values.AceLow : c.Value));
+                }
+                else
+                {
+                    hand.RankedCards.AddRange(cards.OrderByDescending(c => c.Value));
+                }                
             }
-            else if (IsThreeOfaKind(tempCards))
+            else if (IsThreeOfaKind(cards))
             {
-                handRank = HandRanks.ThreeOfaKind;
+                hand.HandRank = Hand.HandRanks.ThreeOfaKind;
+
+                var threeOfaKindCards = cards.GroupBy(c => c.Value).Where(x => x.Count() == 3).First();
+                hand.RankedCards.AddRange(threeOfaKindCards);
+
+                hand.SideCards.AddRange(cards.Except(threeOfaKindCards).OrderByDescending(c => c.Value));
             }
-            else if (IsTwoPair(tempCards))
+            else if (IsTwoPair(cards))
             {
-                handRank = HandRanks.TwoPair;
+                hand.HandRank = Hand.HandRanks.TwoPair;
+
+                var pairCards = cards.GroupBy(c => c.Value).Where(x => x.Count() == 2).OrderByDescending(x => x.Key);
+                hand.RankedCards.AddRange(pairCards.First());
+                hand.RankedCards.AddRange(pairCards.Last());
+
+                hand.SideCards.AddRange(cards.Except(hand.RankedCards));
             }
-            else if (IsPair(tempCards))
+            else if (IsPair(cards))
             {
-                handRank = HandRanks.Pair;
+                hand.HandRank = Hand.HandRanks.Pair;
+
+                var pairCards = cards.GroupBy(c => c.Value).Where(x => x.Count() == 2).First();
+                hand.RankedCards.AddRange(pairCards);
+
+                hand.SideCards.AddRange(cards.Except(pairCards).OrderByDescending(c => c.Value));
             }
-            
-            return handRank;
+            else
+            {
+                hand.SideCards.AddRange(cards.OrderByDescending(c => c.Value));
+            }
+
+            return hand;
 
         }
 
@@ -104,32 +134,32 @@ namespace Hearn.Poker
 
         private bool IsStraight(List<Card> cards)
         {
-            cards.Sort(new CardValueComparer());
+            var tempCards = cards.OrderBy(c => c.Value).ToList();
 
             var isStraight = true;
 
-            for (var i = 1; i < cards.Count; i++)
+            for (var i = 1; i < tempCards.Count; i++)
             {
-                if (cards[i].Value != cards[i-1].Value + 1)
+                if (tempCards[i].Value != tempCards[i - 1].Value + 1)
                 {
                     isStraight = false;
                 }
             }
 
             if (!isStraight)
-            {                
+            {
                 if (cards.Where(c => c.Value == Card.Values.Ace).Any())
                 {
                     isStraight = true;
-                    cards.Sort(new CardValueComparer(true));
+                    tempCards = cards.OrderBy(c => c.Value == Card.Values.Ace ? Card.Values.AceLow : c.Value).ToList();
                     for (var i = 1; i < cards.Count; i++)
                     {
-                        var lowCard = cards[i - 1].Value;
+                        var lowCard = tempCards[i - 1].Value;
                         if (lowCard == Card.Values.Ace)
                         {
                             lowCard = Card.Values.AceLow;
                         }
-                        if (cards[i].Value != lowCard + 1)
+                        if (tempCards[i].Value != lowCard + 1)
                         {
                             isStraight = false;
                         }
@@ -178,9 +208,9 @@ namespace Hearn.Poker
 
         private bool IsRoyalFlush(List<Card> cards)
         {
-            if (IsStraightFlush(cards) 
-             && cards.First().Value == Card.Values.Ten 
-             && cards.Last().Value == Card.Values.Ace)
+            if (IsStraightFlush(cards)
+             && cards.OrderBy(c => c.Value).First().Value == Card.Values.Ten
+             && cards.OrderBy(c => c.Value).Last().Value == Card.Values.Ace)
             {
                 return true;
             }
