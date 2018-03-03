@@ -34,7 +34,15 @@ namespace Hearn.Poker
             else if (IsStraightFlush(cards))
             {
                 hand.HandRank = Hand.HandRanks.StraightFlush;
-                hand.RankedCards.AddRange(cards.OrderByDescending(c => c.Value));
+                if (cards.Select(c => c.Value).Max() == Card.Values.Ace
+                 && cards.Select(c => c.Value).Min() == Card.Values.Two)
+                {
+                    hand.RankedCards.AddRange(cards.OrderByDescending(c => c.Value == Card.Values.Ace ? Card.Values.AceLow : c.Value));
+                }
+                else
+                {
+                    hand.RankedCards.AddRange(cards.OrderByDescending(c => c.Value));
+                }
             }
             else if (IsFourOfaKind(cards))
             {
@@ -105,6 +113,8 @@ namespace Hearn.Poker
             {
                 hand.SideCards.AddRange(cards.OrderByDescending(c => c.Value));
             }
+
+            hand.Score = CalculateScore(hand);
 
             return hand;
 
@@ -215,6 +225,42 @@ namespace Hearn.Poker
                 return true;
             }
             return false;
+        }
+
+        private int CalculateScore(Hand hand)
+        {
+
+            var score = (int)hand.HandRank << 24;
+
+            var bitShift = 16;
+            
+            for(var i = 0; i < hand.RankedCards.Count; i++)
+            {
+                var cardValue = hand.RankedCards[i].Value;
+
+                switch (hand.HandRank)
+                {
+                    case Hand.HandRanks.Straight:
+                    case Hand.HandRanks.StraightFlush:
+                        if (i == 4 && cardValue == Card.Values.Ace)
+                        {
+                            cardValue = Card.Values.AceLow;
+                        }
+                        break;
+                }
+
+                score += (int)cardValue << bitShift;
+                bitShift -= 4;
+            }
+
+            for (var i = 0; i < hand.SideCards.Count; i++)
+            {
+                score += (int)hand.SideCards[i].Value << bitShift;
+                bitShift -= 4;
+            }
+
+            return score;
+
         }
     }
 }

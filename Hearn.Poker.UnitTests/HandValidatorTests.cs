@@ -1203,5 +1203,166 @@ namespace Hearn.Poker.UnitTests
 
         }
 
+        [TestMethod]
+        public void HandValidator_CheckHand_ScoreCalculatedRankedCardsOnly()
+        {
+
+            //Arrange
+
+            var cards = new List<Card>()
+            {
+                new Card() { Value = Card.Values.Five, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.King, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Ten, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Four, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Six, Suit = Card.Suits.Clubs}
+            };
+
+            //Act
+
+            var hand = _handValidator.CheckHand(cards);
+
+            //Assert
+
+            var expectedScore = 0x50DA654; //84,780,628
+
+            Assert.AreEqual(expectedScore, hand.Score);
+
+        }
+
+        [TestMethod]
+        public void HandValidator_CheckHand_ScoreCalculatedWithSideCards()
+        {
+
+            //Arrange
+
+            var cards = new List<Card>()
+            {
+                new Card() { Value = Card.Values.Ace, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Two, Suit = Card.Suits.Diamonds},
+                new Card() { Value = Card.Values.Two, Suit = Card.Suits.Hearts},
+                new Card() { Value = Card.Values.Seven, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Four, Suit = Card.Suits.Spades}
+            };
+
+            //Act
+
+            var hand = _handValidator.CheckHand(cards);
+
+            //Assert
+
+            var expectedScore = 0x1022E74; //16,920,180
+
+            Assert.AreEqual(expectedScore, hand.Score);
+
+        }
+
+        [TestMethod]
+        public void HandValidator_CheckHand_ScoreCalculatedAceHighStraight()
+        {
+
+            //Arrange
+
+            var cards = new List<Card>()
+            {
+                new Card() { Value = Card.Values.Ace, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Ten, Suit = Card.Suits.Diamonds},
+                new Card() { Value = Card.Values.Jack, Suit = Card.Suits.Hearts},
+                new Card() { Value = Card.Values.Queen, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.King, Suit = Card.Suits.Spades}
+            };
+
+            //Act
+
+            var hand = _handValidator.CheckHand(cards);
+
+            //Assert
+
+            var expectedScore = 0x40EDCBA; //68,082,874
+
+            Assert.AreEqual(expectedScore, hand.Score);
+
+        }
+
+        [TestMethod]
+        public void HandValidator_CheckHand_ScoreCalculatedAceLowStraight()
+        {
+
+            //Arrange
+
+            var cards = new List<Card>()
+            {
+                new Card() { Value = Card.Values.Ace, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Five, Suit = Card.Suits.Diamonds},
+                new Card() { Value = Card.Values.Four, Suit = Card.Suits.Hearts},
+                new Card() { Value = Card.Values.Three, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Two, Suit = Card.Suits.Spades}
+            };
+
+            //Act
+
+            var hand = _handValidator.CheckHand(cards);
+
+            //Assert
+
+            var expectedScore = 0x4054321; //67,453,729
+
+            Assert.AreEqual(expectedScore, hand.Score);
+
+        }
+
+        [TestMethod]
+        public void HandValidator_CheckHand_ScoreCalculatedRoyalFlush()
+        {
+
+            //Arrange
+
+            var cards = new List<Card>()
+            {
+                new Card() { Value = Card.Values.Ace, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Ten, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Jack, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Queen, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.King, Suit = Card.Suits.Clubs}
+            };
+
+            //Act
+
+            var hand = _handValidator.CheckHand(cards);
+
+            //Assert
+
+            var expectedScore = 0x90EDCBA; //151,968,954
+
+            Assert.AreEqual(expectedScore, hand.Score);
+
+        }
+
+        [TestMethod]
+        public void HandValidator_CheckHand_ScoreCalculatedAceLowStraightFlush()
+        {
+
+            //Arrange
+
+            var cards = new List<Card>()
+            {
+                new Card() { Value = Card.Values.Ace, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Five, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Four, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Three, Suit = Card.Suits.Clubs},
+                new Card() { Value = Card.Values.Two, Suit = Card.Suits.Clubs}
+            };
+
+            //Act
+
+            var hand = _handValidator.CheckHand(cards);
+
+            //Assert
+
+            var expectedScore = 0x8054321; //134,562,593
+
+            Assert.AreEqual(expectedScore, hand.Score);
+
+        }
     }
 }
